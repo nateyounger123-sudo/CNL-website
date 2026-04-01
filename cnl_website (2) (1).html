@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNL Tube Measurement System | Precision Non-Destructive Testing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --accent: #ff6b35;
+            --accent-light: #ff8c5a;
+            --secondary: #1e293b;
+            --text: #f1f5f9;
+            --text-dim: #cbd5e1;
+            --border: #334155;
+            --grid: rgba(15, 23, 42, 0.4);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background Grid Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.5));
+            border-bottom: 2px solid var(--border);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+            animation: slideIn 0.8s ease-out 0.1s both;
+            line-height: 1.1;
+        }
+
+        .hero h1 .accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 1.5rem auto 2rem;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            animation: slideIn 0.8s ease-out 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: slideIn 0.8s ease-out 0.3s both;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Problem Statement */
+        .problem {
+            padding: 5rem 2rem;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .problem-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.1);
+        }
+
+        .problem-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .problem-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Architecture */
+        .solution {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.5));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .solution-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .solution-text h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-text p {
+            margin-bottom: 1.2rem;
+            color: var(--text-dim);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-dim);
+        }
+
+        .feature-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .diagram {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2rem;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .diagram-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tube-viz {
+            font-size: 3rem;
+            margin: 1rem 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Flaws Section */
+        .flaws {
+            padding: 5rem 2rem;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .flaws h2 {
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .flaws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .flaw-item {
+            background: rgba(15, 23, 42, 0.5);
+            border: 2px solid #ff3333;
+            padding: 1.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .flaw-item h4 {
+            color: #ff3333;
+            margin-bottom: 0.5rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .flaw-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Testing Results */
+        .testing {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.5));
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: rgba(255, 107, 53, 0.1);
+            border-bottom: 2px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .result-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* Specs Section */
+        .specs {
+            padding: 5rem 2rem;
+            background: var(--secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .spec-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 4px;
+        }
+
+        .spec-box h3 {
+            font-family: 'Syne', sans-serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .spec-list {
+            list-style: none;
+        }
+
+        .spec-list li {
+            padding: 0.5rem 0;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+
+        .spec-value {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-dim);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .solution-columns {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: repeat(2, 1fr);
+                font-size: 0.9rem;
+                padding: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">OHM MY GOD™</div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#testing">Testing</a></li>
+                <li><a href="#specs">Specs</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1><span class="accent">OHM MY GOD™</span><br>Advanced Tube Measurement</h1>
+        <p>Non-destructive precision wall thickness measurement at Canadian Nuclear Laboratories. Measuring deformation with ±1mm accuracy across the full tube length and multiple angles.</p>
+        <div class="hero-buttons">
+            <a href="#solution" class="btn btn-primary" style="text-decoration: none;">Learn More</a>
+            <a href="#specs" class="btn btn-secondary" style="text-decoration: none;">View Technical Specs</a>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <h2>The Challenge</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3>Full-Length Measurement</h3>
+                    <p>Required capability to measure tube wall thickness along the entire length, not just select points or segments.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Multi-Angle Detection</h3>
+                    <p>Ability to assess tube deformation and thickness variation at multiple angles around the circumference.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Non-Destructive Testing</h3>
+                    <p>Measurements must be taken without damaging or altering the integrity of the pressure tubes.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Deformation Detection</h3>
+                    <p>System must reliably detect and quantify tube deformation patterns for safety assessment.</p>
+                </div>
+            </div>
+
+            <h2 style="color: #ff3333; margin-top: 3rem;">Previous System Limitations</h2>
+            <div class="problem-grid">
+                <div class="flaw-item">
+                    <h4>⚠ No Zero Matching</h4>
+                    <p>Inability to establish reference points between measurements</p>
+                </div>
+                <div class="flaw-item">
+                    <h4>⚠ Probe Tilt</h4>
+                    <p>Sensor misalignment causing inaccurate readings</p>
+                </div>
+                <div class="flaw-item">
+                    <h4>⚠ Sensor Blocked</h4>
+                    <p>Obstructions preventing complete measurement coverage</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Architecture -->
+    <section class="solution" id="solution">
+        <div class="container">
+            <h2>Our Solution: Internal Rotating Probe System</h2>
+            <div class="solution-columns">
+                <div class="solution-text">
+                    <h3>Comprehensive Design</h3>
+                    <p>A state-of-the-art rotating probe mechanism that travels the full length of pressure tubes while simultaneously rotating 360° to capture multi-angle measurements.</p>
+                    <h4 style="color: var(--accent); margin-top: 1.5rem; margin-bottom: 1rem;">Key Components</h4>
+                    <ul class="feature-list">
+                        <li><strong>360° Probe Rotation:</strong> Full circumferential scanning capability</li>
+                        <li><strong>Dual Lead Screws:</strong> Synchronized axial movement with gear synchronization</li>
+                        <li><strong>Time-of-Flight Sensors:</strong> Two independent distance measurement sensors</li>
+                        <li><strong>Rotary Encoders:</strong> Precise angle and position tracking</li>
+                        <li><strong>Lazy Susan Bearing:</strong> Tube rotation mechanism with precision clamps</li>
+                    </ul>
+                </div>
+                <div class="diagram">
+                    <div class="diagram-content">
+                        <div class="tube-viz">📍</div>
+                        <h4 style="color: var(--accent); font-family: 'Syne', sans-serif;">Rotating Probe Architecture</h4>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 1rem;">Synchronized dual-axis measurement system with real-time angle tracking</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testing Results -->
+    <section class="testing" id="testing">
+        <div class="container">
+            <h2>Testing Results: Sensor Performance Comparison</h2>
+            <div class="results-table">
+                <div class="table-header">
+                    <div>Test Performed</div>
+                    <div>Results</div>
+                    <div>Observations</div>
+                    <div>Conclusion</div>
+                </div>
+                <div class="table-row">
+                    <div style="font-weight: 600; color: var(--accent);">Old vs New Sensor</div>
+                    <div><span class="result-badge">1–2mm Accuracy</span></div>
+                    <div style="font-size: 0.9rem;">New sensor: stable & consistent readings. Old sensor: less consistent, higher deviation</div>
+                    <div style="color: var(--accent); font-weight: 600;">New sensor selected</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: rgba(255, 107, 53, 0.1); border: 1px solid var(--border); border-radius: 4px;">
+                <h3 style="color: var(--accent); margin-bottom: 1rem;">Performance Highlights</h3>
+                <ul class="feature-list">
+                    <li><strong>±1mm Accuracy:</strong> Meets precision requirements for deformation detection</li>
+                    <li><strong>Consistent Readings:</strong> New sensor shows superior stability across repeated trials</li>
+                    <li><strong>Improved Alignment:</strong> Easier to position for accurate measurements</li>
+                    <li><strong>Curved Surface Performance:</strong> Reliable operation on non-flat geometries</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specifications -->
+    <section class="specs" id="specs">
+        <div class="container">
+            <h2>Technical Specifications</h2>
+            <div class="specs-grid">
+                <div class="spec-box">
+                    <h3>Measurement System</h3>
+                    <ul class="spec-list">
+                        <li>Accuracy: <span class="spec-value">±1 mm</span></li>
+                        <li>Measurement Range: <span class="spec-value">Full tube length</span></li>
+                        <li>Angular Resolution: <span class="spec-value">360° continuous</span></li>
+                        <li>Sensor Type: <span class="spec-value">Time-of-Flight</span></li>
+                    </ul>
+                </div>
+                <div class="spec-box">
+                    <h3>Mechanical Components</h3>
+                    <ul class="spec-list">
+                        <li>Tube Holder: <span class="spec-value">Lazy Susan Bearing</span></li>
+                        <li>Positioning: <span class="spec-value">Dual Lead Screws</span></li>
+                        <li>Synchronization: <span class="spec-value">Precision Gears</span></li>
+                        <li>Position Tracking: <span class="spec-value">Rotary Encoders</span></li>
+                    </ul>
+                </div>
+                <div class="spec-box">
+                    <h3>Sensor Technology</h3>
+                    <ul class="spec-list">
+                        <li>Distance Sensors: <span class="spec-value">2x ToF</span></li>
+                        <li>Detection Method: <span class="spec-value">Non-destructive</span></li>
+                        <li>Performance: <span class="spec-value">1–2mm on curves</span></li>
+                        <li>Reliability: <span class="spec-value">High stability</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p style="font-size: 1.8rem; color: var(--accent); margin-bottom: 1rem; font-weight: 800; letter-spacing: 2px;">OHM MY GOD™</p>
+            <p>Non-Destructive Tube Thickness Measurement Solutions</p>
+            <p style="margin-top: 1.5rem; color: #888;">Developed for Canadian Nuclear Laboratories</p>
+            <p style="margin-top: 0.5rem; color: #888;">© 2024 OHM MY GOD. Engineering Excellence in Nuclear Safety.</p>
+        </div>
+    </footer>
+</body>
+</html>
